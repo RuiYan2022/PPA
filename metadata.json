@@ -1,0 +1,8 @@
+
+{
+  "name": "PPA - Personal Project Assistant",
+  "description": "A sophisticated AI-powered project manager that helps you organize, track, and brainstorm your personal and team projects with the help of Gemini.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
