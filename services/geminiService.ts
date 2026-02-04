@@ -2,9 +2,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ProjectUpdate, Project } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const analyzeTeamData = async (updates: ProjectUpdate[], query: string) => {
+  // Initialize inside the function to avoid top-level ReferenceErrors for process.env
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
   const dataSummary = updates.map(u => 
     `${u.teamMember} (${u.initiative}): ${u.status} complete, Health: ${u.health === 1 ? 'Healthy' : u.health === 0 ? 'Warning' : 'Risk'}. Update: ${u.description}`
   ).join('\n');
@@ -23,8 +24,10 @@ export const analyzeTeamData = async (updates: ProjectUpdate[], query: string) =
   return response.text;
 };
 
-// Added getProjectSuggestions for AI-powered task recommendations using structured JSON response
+// AI-powered task recommendations
 export const getProjectSuggestions = async (project: Project): Promise<string[]> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
   const prompt = `Based on the project "${project.name}" with description "${project.description}", suggest 5 concrete next steps or tasks as a JSON array of strings.`;
   
   const response = await ai.models.generateContent({
